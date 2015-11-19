@@ -7,14 +7,28 @@
 
 var fs = require('fs');
 
-var input = process.argv[2];
-console.log(input);
+// console.log("environment: \n", process.env);
 
 fs.readFile('quarkStatements.txt', 'utf8', function(err, data) {
   if (err) console.log("Error reading quarkStatements: ", err);
   // choose response algorithm:
+  // console.log(randomSentence(data.split("")));
   // console.log(mapWords(data.split(" ")));
-  console.log(randomSentence(data.split(".")));
+  var choices = data.split(".");
+  console.log("What'll it be?\n")
+
+  process.stdin.setEncoding('utf8');
+
+  process.stdin.on('readable', function() {
+    var input = process.stdin.read();
+    if (input !== null) {
+      process.stdout.write(randomSentence(choices) + "\n");
+    }
+  });
+
+  // process.stdin.on('end', function() {
+  //   console.log('end');
+  // });
 });
 
 // simplest solution is to return a random reply from the script
