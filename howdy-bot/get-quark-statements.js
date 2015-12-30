@@ -13,9 +13,14 @@ fs.readFile('combined-ds9-scripts.txt', 'utf8', function(err, data) {
 });
 
 function getQuarkLines(data) {
-  return data.replace(/[\t]/g, "").replace(/\n\n/g, "&&&").replace(/\n/g, "").split("&&&").filter(function(line) {
+  // remove tabs and newlines, split on double newlines (between characters' lines)
+  return data.replace(/[\t]/g, "").replace(/\n\n/g, "&&&").replace(/\n/g, " ").split("&&&")
+  .filter(function(line) {
+    // only use quark's lines
     return line.slice(0, 5) === "QUARK";
   }).map(function(line) {
+    // remove stage directions in parentheses
     return line.slice(5).replace(/\(.*\)/g, "");
-  });
+  // preserve separation of sentences
+  }).join("&&&");
 };
